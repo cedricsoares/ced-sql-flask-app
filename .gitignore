@@ -3,3 +3,5 @@ env*
 env/
 env/*
 .ipynb_*
+__pycache__/*
+__pycache__/
