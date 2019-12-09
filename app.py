@@ -1,10 +1,10 @@
-from flask import Flask, render_template, send_file, make_response
+from flask import Flask, render_template, send_file, make_response, request
 import pyodbc
 import io
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
-
+sns.set_style('darkgrid')
 
 app = Flask(__name__, template_folder='./templates')
 
