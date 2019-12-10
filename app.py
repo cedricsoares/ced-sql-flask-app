@@ -1,14 +1,29 @@
-from flask import Flask, render_template, send_file, make_response, request
+from flask import Flask, render_template
 import pyodbc
-import io
 import pandas as pd
 from matplotlib import pyplot as plt
 import seaborn as sns
 sns.set_style('darkgrid')
 
-app = Flask(__name__, template_folder='./templates')
+cnx = pyodbc.connect(
+    server="azuresqlorange.database.windows.net",
+    database="orange_azure",
+    user='orange',
+    tds_version='7.4',
+    password="Supermotdepasse!42",
+    port=1433,
+    driver = [item for item in pyodbc.drivers()][-1]
+)
 
-@app.route('/genre-by-year/<begin>/<end>')
+app = Flask(__name__, 
+            template_folder='templates',
+            static_folder = 'static')
+
+@app.route('/')
+def hello():
+    return 'Hello world'
+
+@app.route('/genres-by-year/<begin>/<end>')
 
 def genres_by_year(begin=None, end=None):
 
@@ -27,6 +42,7 @@ def genres_by_year(begin=None, end=None):
         none 
     
     """
+
     query = f""" SELECT COUNT(CAST(amg.genre AS CHAR)) as films_by_genre, CAST(amg.genre AS CHAR) as genre, am.year
     FROM analysis_movies_genres amg
     LEFT JOIN analysis_movies AS am
@@ -40,13 +56,11 @@ def genres_by_year(begin=None, end=None):
     
     plt.figure(figsize=(12,8))
     sns.barplot(x= 'year', y='films_by_genre', hue='genre', data=df)
+    plt.title(f'Number of films by genre from {begin} to {end}')
     plt.show()
-    
-    bytes_image = io.BytesIO()
-    plt.savefig(bytes_image, format='png')
-    bytes_image.seek(0)
+    plt.savefig('static/images/plot.png')
 
-    return render_template('genre-by-year.html', bytes_image= bytes_image)
+    return render_template('genres-by-year.html', url='/static/images/plot.png')
 
 if __name__ == '__main__':
     app.run(debug=True)
