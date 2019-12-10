@@ -20,8 +20,8 @@ app = Flask(__name__,
             static_folder = 'static')
 
 @app.route('/')
-def hello():
-    return 'Hello world'
+def home():
+    return render_template('home.html')
 
 @app.route('/genres-by-year/<begin>/<end>')
 
