@@ -1,9 +1,10 @@
-from flask import Flask, render_template
-import pyodbc
-import pandas as pd
-from matplotlib import pyplot as plt
-import seaborn as sns
-sns.set_style('darkgrid')
+from flask import Flask, render_template #flask framework packages
+import pyodbc #manage db connection 
+import pandas as pd #manage dataframes
+import os #manage app files 
+from matplotlib import pyplot as plt #manage plot parameters
+import seaborn as sns #make plots
+sns.set_style('darkgrid') #set a plot style
 
 cnx = pyodbc.connect(
     server="azuresqlorange.database.windows.net",
@@ -23,7 +24,7 @@ app = Flask(__name__,
 def home():
     return render_template('home.html')
 
-@app.route('/genres-by-year/<begin>/<end>')
+@app.route('/genres-by-year/<int:begin>/<int:end>')
 
 def genres_by_year(begin=None, end=None):
 
@@ -38,10 +39,13 @@ def genres_by_year(begin=None, end=None):
         end : year to end the range 
         
     Return :
-        
-        none 
+        genres-by-year.html (HTML) : HTML template to display the visualization
+        url (str) : Url of generated png from the visualization
+         
     
     """
+
+    os.remove('static/images/plot.png') #remove previous visualization
 
     query = f""" SELECT COUNT(CAST(amg.genre AS CHAR)) as films_by_genre, CAST(amg.genre AS CHAR) as genre, am.year
     FROM analysis_movies_genres amg
@@ -57,7 +61,6 @@ def genres_by_year(begin=None, end=None):
     plt.figure(figsize=(12,8))
     sns.barplot(x= 'year', y='films_by_genre', hue='genre', data=df)
     plt.title(f'Number of films by genre from {begin} to {end}')
-    plt.show()
     plt.savefig('static/images/plot.png')
 
     return render_template('genres-by-year.html', url='/static/images/plot.png')
