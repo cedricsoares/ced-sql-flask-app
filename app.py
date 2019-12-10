@@ -6,13 +6,17 @@ from matplotlib import pyplot as plt #manage plot parameters
 import seaborn as sns #make plots
 sns.set_style('darkgrid') #set a plot style
 
+from dotenv import load_dotenv
+project_folder = os.path.expanduser('~/ced-sql-flask-app')  
+load_dotenv(os.path.join(project_folder, '.env'))
+
 cnx = pyodbc.connect(
-    server="azuresqlorange.database.windows.net",
-    database="orange_azure",
-    user='orange',
-    tds_version='7.4',
-    password="Supermotdepasse!42",
-    port=1433,
+    server=os.getenv('SERVER'),
+    database=os.getenv('DATABASE'),
+    user=os.getenv('USER'),
+    tds_version=os.getenv('TDS_VERSION'),
+    password=os.getenv('PASSWORD'),
+    port=os.getenv('PORT'),
     driver = [item for item in pyodbc.drivers()][-1]
 )
 
