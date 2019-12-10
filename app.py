@@ -63,4 +63,4 @@ def genres_by_year(begin=None, end=None):
     return render_template('genres-by-year.html', url='/static/images/plot.png')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
