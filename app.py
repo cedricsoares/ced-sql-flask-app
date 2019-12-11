@@ -1,12 +1,19 @@
 from flask import Flask, render_template #flask framework packages
-import pyodbc #manage db connection 
 import pandas as pd #manage dataframes
-import os #manage app files 
 from matplotlib import pyplot as plt #manage plot parameters
 import seaborn as sns #make plots
 sns.set_style('darkgrid') #set a plot style
 
-from dotenv import load_dotenv
+from flask_bootstrap import Bootstrap #manage bootstrap front-end framework
+from flask_nav import Nav
+from flask_nav.elements import Navbar, View, Text, Separator
+
+
+
+import pyodbc #manage db connection 
+from dotenv import load_dotenv #manage secret keys
+import os #manage app files 
+
 project_folder = os.path.expanduser('~/ced-sql-flask-app')  
 load_dotenv(os.path.join(project_folder, '.env'))
 
@@ -20,9 +27,22 @@ cnx = pyodbc.connect(
     driver = [item for item in pyodbc.drivers()][-1]
 )
 
+
 app = Flask(__name__, 
             template_folder='templates',
             static_folder = 'static')
+
+Bootstrap(app)
+nav = Nav(app)
+
+nav.register_element('my_navbar', Navbar(
+    'navigation',
+    View('Home Page', 'home')))
+
+
+
+
+nav.init_app(app)
 
 @app.route('/')
 def home():
@@ -70,4 +90,4 @@ def genres_by_year(begin=None, end=None):
     return render_template('genres-by-year.html', url='/static/images/plot.png')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
