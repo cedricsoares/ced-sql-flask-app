@@ -1,4 +1,4 @@
-from flask import Flask, render_template #flask framework packages
+from flask import Flask, render_template, request, redirect #flask framework packages
 import pandas as pd #manage dataframes
 from matplotlib import pyplot as plt #manage plot parameters
 import seaborn as sns #make plots
@@ -8,7 +8,9 @@ from flask_bootstrap import Bootstrap #manage bootstrap front-end framework
 from flask_nav import Nav
 from flask_nav.elements import Navbar, View, Text, Separator
 
-
+from flask_wtf import FlaskForm #manage forms
+from wtforms import  StringField, IntegerField, validators #field types
+from wtforms.validators import DataRequired
 
 import pyodbc #manage db connection 
 from dotenv import load_dotenv #manage secret keys
@@ -32,6 +34,7 @@ app = Flask(__name__,
             template_folder='templates',
             static_folder = 'static')
 
+app.config['SECRET_KEY'] = 'secret key' #generate a secret key used by forms
 Bootstrap(app)
 nav = Nav(app)
 
@@ -44,9 +47,19 @@ nav.register_element('my_navbar', Navbar(
 
 nav.init_app(app)
 
-@app.route('/')
+class YearsRange(FlaskForm): #define form to get values for genres_by_years() function
+    begin = IntegerField('Begin', [validators.DataRequired()])
+    end = IntegerField('End', [validators.DataRequired()])
+
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template('home.html')
+    year_range_form = YearsRange() #create a form
+
+    if request.method == "POST" and year_range_form.validate_on_submit():
+        range_begin = year_range_form.begin.data 
+        range_end = year_range_form.end.data
+        return redirect(f'/genres-by-year/{range_begin}/{range_end}')    
+    return render_template('home.html', year_range_form=year_range_form)
 
 @app.route('/genres-by-year/<int:begin>/<int:end>')
 

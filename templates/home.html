@@ -26,13 +26,12 @@
             <div class="card-body">
               <h3 class="card-title">Genres by years</h3>
               <p class="card-text">To see how many films by genre in a specific year range fill the two fields with begin and end range years. </p>
-              <div class="input-group">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="year-range">First and last year</span>
-                  </div>
-                  <input type="text" class="form-control">
-                  <input type="text" class="form-control">
-                </div>
+                <form method="POST" action="/">
+                  <dl>
+                    {{ wtf.quick_form(year_range_form)}}
+                    <input class= "btn btn-primary" type="submit" value="Submit">
+                  </dl>
+                </form>
             </div>
           </div>
         </div>
