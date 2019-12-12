@@ -1,0 +1,36 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/fixes.html" as fixes %}
+
+<!DOCTYPE html>
+    <html lang="en"></html>
+
+
+    <head>
+        {% block head %}
+        <meta charset="ISO-8859-1">
+        {% block styles %}
+        {{ super() }}
+        <link rel="stylesheet"
+            href="{{url_for('.static', filename='mystyle.css')}}">
+        {% endblock styles%}
+        <title>{% block title %}{% endblock title %}</title>
+       {% endblock head %}
+    </head>
+
+    <body>
+        <div id= navigation>
+            {% block navbar %}
+            {{nav.my_navbar.render()}}
+            {% endblock navbar %}
+        </div>
+            
+        <div id="content">{% block content %} {% endblock %}</div>
+
+        <div id="footer">
+            {% block footer %}
+            {% endblock footer %}
+        </div>
+
+    </body>
+
+</html>

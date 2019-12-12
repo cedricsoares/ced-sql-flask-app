@@ -1,41 +1,52 @@
-{% extends "bootstrap/base.html" %}
+{% extends "layout.html" %}
 
-{% block doc %}
-<!DOCTYPE html>
-{% block html %}
+{% block title %} Awesome movies dashboard {% endblock title %}
 
-{% block html_attribs %}
-<html lang='en'>
-{% endblock html_attribs %}
 
-    {% block head%}
-    <head>
-        {% block meta %}
-        <meta charset="utf-8">
-        {% endblock meta %}
-        {% block title %}
-        <title>Awesome movies dashboard</title>
-        {% endblock title %}
-    </head>
-    {% endblock head %}
 
-    {% block body %}
-    <body>
-            {% block navbar %}
-            {{nav.my_navbar.render()}}
-            {% endblock %}
+{% block body %}
+{% block navbar %}
+{{ super() }}
+{% endblock navbar %}
 
-        <h1> The best dashboard lo learn about movies</h1>
-        <p> Welcome, using specif urls you will be able to get data visualizations about movies</p>
-        <br/>
-        <h2> How does it works !</h2>
-        <p>Feel free to use belows with your selectected parameters</p>
-        <br/>
-        <p><b>Check films by genre in a specific year range :</b> https://ced-viz-app.azurewebsites.net/genres-by-year/&lt;beging_year&gt;/&lt;end_year&gt; </p>
-    </body>
-    {% endblock body %}
+{% block content %}
+<div class = container>
+  <div class= 'jumbotron'>
+      <h1 class ='display-4'> The best dashboard lo learn about movies</h1>
+      <p class ='lead'> Welcome, you will be able to get data visualizations about movies</p>
+      <hr class="my-4">
+      <p>Feel free to use detailed below functionalities </p>
+  </div>
+</div>
 
-</html>
-{% endblock html %}
+<div class = container>
+    <div class="row">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Genres by years</h3>
+              <p class="card-text">To see how many films by genre in a specific year range fill the two fields with begin and end range years. </p>
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="year-range">First and last year</span>
+                  </div>
+                  <input type="text" class="form-control">
+                  <input type="text" class="form-control">
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h3 class="card-title">Special title treatment</h3>
+              <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
 
-{% endblock doc %}
+{% endblock content %}
+{% endblock body %}

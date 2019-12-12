@@ -36,7 +36,7 @@ Bootstrap(app)
 nav = Nav(app)
 
 nav.register_element('my_navbar', Navbar(
-    'navigation',
+    'Movie dashboard',
     View('Home Page', 'home')))
 
 
